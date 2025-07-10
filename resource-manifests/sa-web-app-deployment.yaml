@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sa-web-app
+  labels:
+    app: sa-web-app
+spec:
+  selector:
+    matchLabels:
+      app: sa-web-app
+  replicas: 2
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxUnavailable: 1
+      maxSurge: 1 
+  template:
+    metadata:
+      labels:
+        app: sa-web-app
+    spec:
+      containers:
+      - image: tony0925/sa-webapp:v12
+        imagePullPolicy: Always
+        name: sa-web-app
+        env:
+          - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+            value: "kafka-service:9092"
+          - name: KAFKA_TOPIC
+            value: "test-topic"
+        ports:
+          - containerPort: 8080

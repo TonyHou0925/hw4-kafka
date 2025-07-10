@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  # Web Application (Java Backend)
+  webapp:
+    image: tony0925/sentiment-analysis-web-app  # Image name, this can be built locally or pulled from Docker Hub
+    #build: ./webapp  # Optional: If you want to build from Dockerfile in ./webapp folder
+    ports:
+      - "8080:8080"  # Expose port 8080 on the host and map it to the container
+    environment:
+      - SA_LOGIC_API_URL=http://sa-logic:5000  # Point to the logic service
+    depends_on:
+      - logic  # Make sure the logic service is up before starting the webapp
+    networks:
+      - sa-network
+
+  # Sentiment Analysis Logic (Python Backend)
+  logic:
+    image: tony0925/sa-logic  # Image name
+    #build: ./logic  # Optional: If you want to build from Dockerfile in ./logic folder
+    ports:
+      - "5050:5050"  # Expose port 5000 on the host and map it to the container
+    networks:
+      - sa-network
+
+  # Frontend (Nginx ReactJS)
+  frontend:
+    image: tony0925/sa-frontend  # Image name
+    #build: ./frontend  # Optional: If you want to build from Dockerfile in ./frontend folder
+    ports:
+      - "80:80"  # Expose port 80 (default HTTP) on the host and map it to the container
+    networks:
+      - sa-network
+
+# Define the network to ensure all services can communicate
+networks:
+  sa-network:
+    driver: bridge  # Default networking driver for Docker containers
