@@ -3,7 +3,7 @@ from confluent_kafka import Producer
 import json
 
 # YouTube API Setup
-YOUTUBE_API_KEY = "AIzaSyA9ePimX4y5EW9ECKTHfIEPFmfIpZ4Okoc"
+YOUTUBE_API_KEY = #API KEY
 youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
 
 # Kafka Producer Setup
